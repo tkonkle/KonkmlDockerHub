@@ -35,7 +35,7 @@
 
 FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu16.04
 
-LABEL maintainer="Talia Konkle <tkonkle@wjh.harvard.com>
+LABEL maintainer="Talia Konkle <talia_konkle@harvard.edu>"
 
 #--------------------------------------
 #   variables

@@ -19,7 +19,7 @@
 # able to login with your password.
 #
 # build it:
-# docker build -t tkonkle/pytorch-v1.0:ubuntu18.04-cuda10.1-cudnn7 https://github.com/tkonkle/KonkmlDockerHub.git#master:Ubuntu-18.04/Cuda10.1/Pytorch-v1.0
+# docker build -t tkonkle/pytorch-v1.0:ubuntu18.04-cuda10.1-cudnn7 https://github.com/tkonkle/KonkmlDockerHub.git#master:Ubuntu-18.04/Cuda-10.1/Pytorch-v1.0
 #
 # test it:
 # docker run -it --rm tkonkle/pytorch-v1.0:ubuntu18.04-cuda10.1-cudnn7 nvidia-smi
@@ -280,7 +280,7 @@ RUN conda uninstall --force jpeg libtiff -y \
 #--------------------------------------
 
 
-RUN conda install -y pytorch=$PYTORCH_VERSION torchvision cudatoolkit=10.0 -c pytorch \
+RUN conda install -y pytorch=$PYTORCH_VERSION torchvision cudatoolkit=10.1 -c pytorch \
   && conda install -y -c fastai fastai fastprogress
 
 RUN pip install tensorflow-gpu \

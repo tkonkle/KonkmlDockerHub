@@ -36,6 +36,9 @@
 FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu16.04
 
 LABEL maintainer="Talia Konkle <talia_konkle@harvard.edu>"
+#     if I ever rebuild from scratch, change this to:
+#     LABEL maintainer="Talia Konkle <tkonkle@gmail.com, talia_konkle@harvard.edu>"
+
 
 #--------------------------------------
 #   variables

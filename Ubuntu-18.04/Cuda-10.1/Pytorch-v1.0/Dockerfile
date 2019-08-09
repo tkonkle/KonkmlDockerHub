@@ -126,6 +126,7 @@ RUN cd /tmp && \
     $CONDA_DIR/bin/conda config --system --set auto_update_conda false && \
     $CONDA_DIR/bin/conda config --system --set show_channel_urls true && \
     $CONDA_DIR/bin/conda install --quiet --yes conda="${MINICONDA_VERSION%.*}.*" && \
+    $CONDA_DIR/bin/conda update --all --quiet --yes && \
     conda clean -tipsy && \
     rm -rf /home/$NB_USER/.cache/yarn && \
     fix-permissions $CONDA_DIR && \
@@ -153,21 +154,21 @@ USER $NB_UID
 # files across image layers when the permissions change
 
 ### tk
-#
-# RUN conda install --quiet --yes \
-#     "conda=${MINICONDA_VERSION}" \
-#     'notebook=5.7.*' \
-#     'jupyterhub=0.9.*' \
-#     'jupyterlab=0.35.*' && \
-#     conda clean -tipsy && \
-#     jupyter labextension install @jupyterlab/hub-extension@^0.12.0 && \
-#     npm cache clean --force && \
-#     jupyter notebook --generate-config && \
-#     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
-#     rm -rf /home/$NB_USER/.cache/yarn && \
-#     fix-permissions $CONDA_DIR && \
-#     fix-permissions /home/$NB_USER
-#
+
+RUN conda install --quiet --yes \
+    "conda=${MINICONDA_VERSION}" \
+    'notebook=5.7.*' \
+    'jupyterhub=0.9.*' \
+    'jupyterlab=0.35.*' && \
+    conda clean -tipsy && \
+    jupyter labextension install @jupyterlab/hub-extension@^0.12.0 && \
+    npm cache clean --force && \
+    jupyter notebook --generate-config && \
+    rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+    rm -rf /home/$NB_USER/.cache/yarn && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
 # #--------------------------------------
 # # Install all OS dependencies for fully functional notebook server:
 # #--------------------------------------

@@ -153,8 +153,6 @@ USER $NB_UID
 # Do all this in a single RUN command to avoid duplicating all of the
 # files across image layers when the permissions change
 
-### tk
-
 RUN conda install --quiet --yes \
     "conda=${MINICONDA_VERSION}" \
     'notebook=5.7.*' \
@@ -169,161 +167,161 @@ RUN conda install --quiet --yes \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
-# #--------------------------------------
-# # Install all OS dependencies for fully functional notebook server:
-# #--------------------------------------
-#
-# USER root
-#
-# RUN apt-get update && apt-get install -yq --no-install-recommends \
-#     build-essential \
-#     emacs \
-#     git \
-#     inkscape \
-#     jed \
-#     libsm6 \
-#     libxext-dev \
-#     libxrender1 \
-#     lmodern \
-#     netcat \
-#     pandoc \
-#     python-dev \
-#     texlive-fonts-extra \
-#     texlive-fonts-recommended \
-#     texlive-generic-recommended \
-#     texlive-latex-base \
-#     texlive-latex-extra \
-#     texlive-xetex \
-#     unzip \
-#     nano \
-#     && apt-get clean && \
-#     rm -rf /var/lib/apt/lists/*
-#
-#
-#
-# #--------------------------------------
-# # Setup Python 3 Environment
-# #--------------------------------------
-#
-# USER $NB_UID
-# WORKDIR $HOME
-#
-# # Install Python 3 packages
-# # Remove pyqt and qt pulled in for matplotlib since we're only ever going to
-# # use notebook-friendly backends in these images
-# RUN conda install --quiet --yes \
-#     "conda=${MINICONDA_VERSION}" \
-#     'av' \
-#     'conda-forge::blas=*=openblas' \
-#     'ipywidgets=7.2*' \
-#     'pandas=0.23*' \
-#     'numexpr=2.6*' \
-#     'matplotlib=2.2*' \
-#     'scipy=1.1*' \
-#     'seaborn=0.9*' \
-#     'scikit-learn=0.19*' \
-#     'scikit-image=0.14*' \
-#     'sk-video=1.1*' \
-#     'sympy=1.1*' \
-#     'cython=0.28*' \
-#     'patsy=0.5*' \
-#     'statsmodels=0.9*' \
-#     'cloudpickle=0.5*' \
-#     'dill=0.2*' \
-#     'numba=0.38*' \
-#     'bokeh=0.12*' \
-#     'sqlalchemy=1.2*' \
-#     'hdf5=1.10*' \
-#     'h5py=2.7*' \
-#     'vincent=0.4.*' \
-#     'beautifulsoup4=4.6.*' \
-#     'protobuf=3.*' \
-#     'xlrd'  && \
-#     conda remove --quiet --yes --force qt pyqt && \
-#     conda clean -tipsy && \
-#     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
-#     jupyter labextension install @jupyter-widgets/jupyterlab-manager@^0.38.1 && \
-#     jupyter labextension install jupyterlab_bokeh@^0.6.3 && \
-#     npm cache clean --force && \
-#     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
-#     rm -rf /home/$NB_USER/.cache/yarn && \
-#     rm -rf /home/$NB_USER/.node-gyp && \
-#     fix-permissions $CONDA_DIR && \
-#     fix-permissions /home/$NB_USER
-#
-# # Install facets which does not have a pip or conda package at the moment
-# RUN cd /tmp && \
-#     git clone https://github.com/PAIR-code/facets.git && \
-#     cd facets && \
-#     jupyter nbextension install facets-dist/ --sys-prefix && \
-#     cd && \
-#     rm -rf /tmp/facets && \
-#     fix-permissions $CONDA_DIR && \
-#     fix-permissions /home/$NB_USER
-#
-# # Import matplotlib the first time to build the font cache.
-# ENV XDG_CACHE_HOME /home/$NB_USER/.cache/
-# RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
-#     fix-permissions /home/$NB_USER
-#
-#
-# #--------------------------------------
-# # Install Additional Packages
-# #--------------------------------------
-#
-# USER root
-#
-# RUN pip install wget pathlib addict nvidia-ml-py3 \
-#   && conda install -y cookiecutter \
-#   && conda install -c menpo pathlib \
-#   && conda install -y dask \
-#   && conda clean -tipsy
-#
-# #--------------------------------------
-# # Install Optimized Fast PIL
-# #--------------------------------------
-#
-# RUN conda uninstall --force jpeg libtiff -y \
-#   && pip uninstall -y pillow \
-#   && conda install -y -c conda-forge libjpeg-turbo \
-#   && CC="cc -mavx2" pip install --no-cache-dir -U --force-reinstall pillow-simd
-#
-#
-# #--------------------------------------
-# #   INSTALL DeepLearning Frameworks
-# #--------------------------------------
-#
-#
-# RUN conda install -y pytorch=$PYTORCH_VERSION torchvision cudatoolkit=10.1 -c pytorch \
-#   && conda install -y -c fastai fastai fastprogress
-#
-# RUN pip install tensorflow-gpu \
-#   && pip install mxnet-cu100
-#
-#
-# #--------------------------------------
-# # Notebook Setup
-# #--------------------------------------
-#
-# USER root
-#
-# EXPOSE 8888
-# WORKDIR $HOME/work
-#
-# # Configure container startup
-# ENTRYPOINT ["tini", "-g", "--"]
-# CMD ["start-notebook.sh"]
-#
-# # Add local files as late as possible to avoid cache busting
-# COPY credential-helper.sh /usr/local/bin/
-# COPY start.sh /usr/local/bin/
-# COPY start-notebook.sh /usr/local/bin/
-# COPY start-singleuser.sh /usr/local/bin/
-# COPY jupyter_notebook_config.py /etc/jupyter/
-# COPY genpass.py .
-# RUN fix-permissions /etc/jupyter/
-#
-# WORKDIR $HOME/work
-#
-# # Switch back to jovyan to avoid accidental container runs as root
-# USER $NB_UID
+#--------------------------------------
+# Install all OS dependencies for fully functional notebook server:
+#--------------------------------------
+
+USER root
+
+RUN apt-get update && apt-get install -yq --no-install-recommends \
+    build-essential \
+    emacs \
+    git \
+    inkscape \
+    jed \
+    libsm6 \
+    libxext-dev \
+    libxrender1 \
+    lmodern \
+    netcat \
+    pandoc \
+    python-dev \
+    texlive-fonts-extra \
+    texlive-fonts-recommended \
+    texlive-generic-recommended \
+    texlive-latex-base \
+    texlive-latex-extra \
+    texlive-xetex \
+    unzip \
+    nano \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+
+
+#--------------------------------------
+# Setup Python 3 Environment
+#--------------------------------------
+
+USER $NB_UID
+WORKDIR $HOME
+
+# Install Python 3 packages
+# Remove pyqt and qt pulled in for matplotlib since we're only ever going to
+# use notebook-friendly backends in these images
+RUN conda install --quiet --yes \
+    "conda=${MINICONDA_VERSION}" \
+    'av' \
+    'conda-forge::blas=*=openblas' \
+    'ipywidgets=7.2*' \
+    'pandas=0.23*' \
+    'numexpr=2.6*' \
+    'matplotlib=2.2*' \
+    'scipy=1.1*' \
+    'seaborn=0.9*' \
+    'scikit-learn=0.19*' \
+    'scikit-image=0.14*' \
+    'sk-video=1.1*' \
+    'sympy=1.1*' \
+    'cython=0.28*' \
+    'patsy=0.5*' \
+    'statsmodels=0.9*' \
+    'cloudpickle=0.5*' \
+    'dill=0.2*' \
+    'numba=0.38*' \
+    'bokeh=0.12*' \
+    'sqlalchemy=1.2*' \
+    'hdf5=1.10*' \
+    'h5py=2.7*' \
+    'vincent=0.4.*' \
+    'beautifulsoup4=4.6.*' \
+    'protobuf=3.*' \
+    'xlrd'  && \
+    conda remove --quiet --yes --force qt pyqt && \
+    conda clean -tipsy && \
+    jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
+    jupyter labextension install @jupyter-widgets/jupyterlab-manager@^0.38.1 && \
+    jupyter labextension install jupyterlab_bokeh@^0.6.3 && \
+    npm cache clean --force && \
+    rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
+    rm -rf /home/$NB_USER/.cache/yarn && \
+    rm -rf /home/$NB_USER/.node-gyp && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+# Install facets which does not have a pip or conda package at the moment
+RUN cd /tmp && \
+    git clone https://github.com/PAIR-code/facets.git && \
+    cd facets && \
+    jupyter nbextension install facets-dist/ --sys-prefix && \
+    cd && \
+    rm -rf /tmp/facets && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+# Import matplotlib the first time to build the font cache.
+ENV XDG_CACHE_HOME /home/$NB_USER/.cache/
+RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
+    fix-permissions /home/$NB_USER
+
+
+#--------------------------------------
+# Install Additional Packages
+#--------------------------------------
+
+USER root
+
+RUN pip install wget pathlib addict nvidia-ml-py3 \
+  && conda install -y cookiecutter \
+  && conda install -c menpo pathlib \
+  && conda install -y dask \
+  && conda clean -tipsy
+
+#--------------------------------------
+# Install Optimized Fast PIL
+#--------------------------------------
+
+RUN conda uninstall --force jpeg libtiff -y \
+  && pip uninstall -y pillow \
+  && conda install -y -c conda-forge libjpeg-turbo \
+  && CC="cc -mavx2" pip install --no-cache-dir -U --force-reinstall pillow-simd
+
+
+#--------------------------------------
+#   INSTALL DeepLearning Frameworks
+#--------------------------------------
+
+
+RUN conda install -y pytorch=$PYTORCH_VERSION torchvision cudatoolkit=10.1 -c pytorch \
+  && conda install -y -c fastai fastai fastprogress
+
+RUN pip install tensorflow-gpu \
+  && pip install mxnet-cu100
+
+
+#--------------------------------------
+# Notebook Setup
+#--------------------------------------
+
+USER root
+
+EXPOSE 8888
+WORKDIR $HOME/work
+
+# Configure container startup
+ENTRYPOINT ["tini", "-g", "--"]
+CMD ["start-notebook.sh"]
+
+# Add local files as late as possible to avoid cache busting
+COPY credential-helper.sh /usr/local/bin/
+COPY start.sh /usr/local/bin/
+COPY start-notebook.sh /usr/local/bin/
+COPY start-singleuser.sh /usr/local/bin/
+COPY jupyter_notebook_config.py /etc/jupyter/
+COPY genpass.py .
+RUN fix-permissions /etc/jupyter/
+
+WORKDIR $HOME/work
+
+# Switch back to jovyan to avoid accidental container runs as root
+USER $NB_UID

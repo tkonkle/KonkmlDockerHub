@@ -1,5 +1,5 @@
 
-# tkonkle/pytorch-v1.0:ubuntu18.04-cuda10.1-cudnn7
+# tkonkle/pytorch-v1.1:ubuntu18.04-cuda10.1-cudnn7
 #
 # Creates a minimal jupyterlab notebook server with access to the GPU on the
 # host machine, running Ubuntu 16.04, CUDA 10.0, CUDNN7, python2, python3.
@@ -19,25 +19,23 @@
 # able to login with your password.
 #
 # build it:
-# docker build -t tkonkle/pytorch-v1.0:ubuntu18.04-cuda10.1-cudnn7 https://github.com/tkonkle/KonkmlDockerHub.git#master:Ubuntu-18.04/Cuda-10.1/Pytorch-v1.0
+# docker build -t tkonkle/pytorch-v1.1:ubuntu18.04-cuda10.1-cudnn7 https://github.com/tkonkle/KonkmlDockerHub.git#master:Ubuntu-18.04/Cuda-10.1/Pytorch-v1.1
 #
 # test it:
-# docker run -it --rm tkonkle/pytorch-v1.0:ubuntu18.04-cuda10.1-cudnn7 nvidia-smi
+# docker run -it --rm tkonkle/pytorch-v1.1:ubuntu18.04-cuda10.1-cudnn7 nvidia-smi
 #
 # generate a password:
-# docker run -it --rm tkonkle/pytorch-v1.0:ubuntu18.04-cuda10.1-cudnn7 python /genpass.py -p 'supersecretpassword'
+# docker run -it --rm tkonkle/pytorch-v1.1:ubuntu18.04-cuda10.1-cudnn7 python /genpass.py -p 'supersecretpassword'
 #
 # mount it:
-# docker run -it --rm tkonkle/pytorch-v1.0:ubuntu18.04-cuda10.1-cudnn7 bash
+# docker run -it --rm tkonkle/pytorch-v1.1:ubuntu18.04-cuda10.1-cudnn7 bash
 #
 # run the notebook:
-# docker run -it --rm -p 8888:8888 tkonkle/pytorch-v1.0:ubuntu18.04-cuda10.1-cudnn7
+# docker run -it --rm -p 8888:8888 tkonkle/pytorch-v1.1:ubuntu18.04-cuda10.1-cudnn7
 
 FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu16.04
 
-LABEL maintainer="Talia Konkle <talia_konkle@harvard.edu>"
-#     if I ever rebuild from scratch, change this to:
-#     LABEL maintainer="Talia Konkle <tkonkle@gmail.com, talia_konkle@harvard.edu>"
+LABEL maintainer="Talia Konkle <tkonkle@gmail.com, talia_konkle@harvard.edu>"
 
 
 #--------------------------------------
@@ -45,7 +43,7 @@ LABEL maintainer="Talia Konkle <talia_konkle@harvard.edu>"
 #--------------------------------------
 
 ENV CUDA_DEVICE_ORDER=PCI_BUS_ID
-ARG PYTORCH_VERSION=1.0
+ARG PYTORCH_VERSION=1.1
 
 
 #--------------------------------------
